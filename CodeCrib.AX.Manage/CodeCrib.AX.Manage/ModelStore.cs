@@ -26,15 +26,9 @@ namespace CodeCrib.AX.Manage
 
     public class ModelStore
     {
-        string dbServer;
-        string dbName;
-        string axutilBinaryFolder;
-
-        private string axUtilError;
-        private string axUtilInfo;
-
-        public string AxUtilInfo { get => axUtilInfo; }
-        public string AxUtilError { get => axUtilError; }
+        private string dbServer;
+        private string dbName;
+        private readonly string axutilBinaryFolder;
 
         public static void ExtractModelInfo(string modelManifest, out string publisher, out string modelName, out string layer)
         {
@@ -209,37 +203,8 @@ namespace CodeCrib.AX.Manage
         {
             AXUtilCommand.ExecuteCommand(axutilBinaryFolder, parameters, 60);
         }
-        /*
-        private void RunAXUtil(string parameters, string errorPrefix)
-        {
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(String.Concat(axutilBinaryFolder, @"\axutil.exe"), parameters);
-            processStartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-            processStartInfo.WorkingDirectory = axutilBinaryFolder;
-            processStartInfo.RedirectStandardError = true;
-            processStartInfo.RedirectStandardOutput = true;
-            processStartInfo.UseShellExecute = false;
 
-            Process process = Process.Start(processStartInfo);
-            string error = process.StandardError.ReadToEnd();
-            string info = process.StandardOutput.ReadToEnd();
-
-            try
-            {
-                process.WaitForExit();
-                if (process.ExitCode != 0)
-                    throw new Exception();
-
-                axUtilInfo = info;
-                axUtilError = error;
-            }
-            catch
-            {
-                throw new Exception(string.Format("{0}:\r\nAXUtil parameters: '{1}'\r\nMessage: {2}", errorPrefix, parameters, string.IsNullOrEmpty(error) ? info : error));
-            }
-        }
-        */
-
-            public List<string> GetModelElements(string manifestFile)
+        public List<string> GetModelElements(string manifestFile)
         {
             ModelManifest manifest = ModelManifest.Read(manifestFile);
             return GetModelElements(manifest.Name, manifest.Publisher);
@@ -251,9 +216,11 @@ namespace CodeCrib.AX.Manage
             AxUtilContext utilContext = new AxUtilContext();
             var modelArgument = new ModelArgument(modelName, modelPublisher);
 
-            AxUtil util = new AxUtil();
-            util.Context = new AxUtilContext();
-            util.Config = new AxUtilConfiguration();
+            AxUtil util = new AxUtil
+            {
+                Context = new AxUtilContext(),
+                Config = new AxUtilConfiguration()
+            };
             var contents = util.View(modelArgument, true);
 
             foreach (var c in contents.Elements)
@@ -285,13 +252,15 @@ namespace CodeCrib.AX.Manage
 
         public void CreateModel(string modelName, string modelPublisher, string layer, string displayName, string description, string version)
         {
-            ModelManifest manifest = new ModelManifest();
-            manifest.Name = modelName;
-            manifest.Publisher = modelPublisher;
-            manifest.Version = version;
-            manifest.DisplayName = displayName;
-            manifest.Description = description;
-            manifest.Layer = (Layer)System.Enum.Parse(typeof(Layer), layer, true);
+            ModelManifest manifest = new ModelManifest
+            {
+                Name = modelName,
+                Publisher = modelPublisher,
+                Version = version,
+                DisplayName = displayName,
+                Description = description,
+                Layer = (Layer)System.Enum.Parse(typeof(Layer), layer, true)
+            };
 
             CreateModelFromManifest(manifest);
         }
@@ -346,12 +315,14 @@ namespace CodeCrib.AX.Manage
         {
             string parameters = String.Format("import /s:{0} /db:{1} \"/file:{2}\" /conflict:{3} /noPrompt", dbServer, dbName, modelFile, resolverType.ToString());
 
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(String.Concat(axutilBinaryFolder, @"\axutil.exe"), parameters);
-            processStartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-            processStartInfo.WorkingDirectory = axutilBinaryFolder;
-            processStartInfo.RedirectStandardError = true;
-            processStartInfo.RedirectStandardOutput = true;
-            processStartInfo.UseShellExecute = false;
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(String.Concat(axutilBinaryFolder, @"\axutil.exe"), parameters)
+            {
+                WindowStyle = ProcessWindowStyle.Minimized,
+                WorkingDirectory = axutilBinaryFolder,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+                UseShellExecute = false
+            };
 
             Process process = Process.Start(processStartInfo);
             string error = process.StandardError.ReadToEnd();

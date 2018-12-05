@@ -60,6 +60,15 @@ namespace CodeCrib.AX.Deploy
             return serverConfig;
         }
 
+        public static CodeCrib.AX.Config.RemoteServer GetServerConfigRemote(string clientConfigFile)
+        {
+            CodeCrib.AX.Config.Client clientConfig = GetClientConfig(clientConfigFile);
+
+            var serverConfig = CodeCrib.AX.Config.RemoteServer.GetConfigFromRegistryRemote(clientConfig.Connections[0].ServerName, clientConfig.Connections[0].TCPIPPort);
+
+            return serverConfig;
+        }
+
         public static uint GetServerNumber(string clientConfigFile)
         {
             CodeCrib.AX.Config.Client clientConfig = GetClientConfig(clientConfigFile);
