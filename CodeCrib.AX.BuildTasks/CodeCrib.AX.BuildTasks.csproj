@@ -63,13 +63,18 @@
     <Compile Include="DatabaseTask.cs" />
     <Compile Include="DeployReferencesTask.cs" />
     <Compile Include="ClientGenerateCILTask.cs" />
+    <Compile Include="ExportModelStoreTask.cs" />
     <Compile Include="ExportModelTask.cs" />
     <Compile Include="IBuildLogger.cs" />
     <Compile Include="ClientImportLabelsTask.cs" />
+    <Compile Include="ImportModelStoreTask.cs" />
     <Compile Include="ImportModelTask.cs" />
+    <Compile Include="ModelStoreApplySchemaTask.cs" />
+    <Compile Include="ModelStoreInitializeSchemaTask.cs" />
     <Compile Include="ModelStoreTaskParameters.cs" />
     <Compile Include="NullBuildLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RefreshServicesTask.cs" />
     <Compile Include="RestoreDatabaseTask.cs" />
   </ItemGroup>
   <ItemGroup>
