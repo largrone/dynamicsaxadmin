@@ -18,7 +18,7 @@ namespace CodeCrib.AX.Sql
 {
     public class DbManagement
     {
-        private const int DB_TIMEOUT = 600;
+        private const int DB_TIMEOUT = 6000;
         private const string DB_FIELD_LOGICALNAME = "LogicalName";
         private const string DB_FIELD_TYPE = "Type";
         private const string DB_FILETYPE_LOG = "L";
