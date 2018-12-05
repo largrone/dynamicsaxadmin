@@ -45,6 +45,7 @@
     <Compile Include="ConfigBase.cs" />
     <Compile Include="ConfigProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteServer.cs" />
     <Compile Include="Server.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -240,7 +240,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("useserverprinters"));
+                var propStr = this.GetPropertyValue("useserverprinters");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -253,7 +257,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("aosencryption"));
+                var propStr = this.GetPropertyValue("aosencryption");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -267,7 +275,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("xppdebug"));
+                var propStr = this.GetPropertyValue("xppdebug");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -281,7 +293,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("globalbreakpoints"));
+                var propStr = this.GetPropertyValue("globalbreakpoints");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -294,7 +310,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("performanceProfile"));
+                var propStr = this.GetPropertyValue("performanceProfile");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {

@@ -111,7 +111,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("port"));
+                var propStr = this.GetPropertyValue("port");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -124,7 +128,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("WSDLPort"));
+                var propStr = this.GetPropertyValue("WSDLPort");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
         }
 
@@ -133,7 +141,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("exposeserverprinters"));
+                var propStr = this.GetPropertyValue("exposeserverprinters");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -146,7 +158,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("xppdebug"));
+                var propStr = this.GetPropertyValue("xppdebug");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -159,7 +175,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("globalbreakpoints"));
+                var propStr = this.GetPropertyValue("globalbreakpoints");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -172,7 +192,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("hotswapenabled"));
+                var propStr = this.GetPropertyValue("hotswapenabled");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -219,11 +243,15 @@ namespace CodeCrib.AX.Config
         }
 
         [XmlIgnore]
-        public byte StatementCache
+        public uint StatementCache
         {
             get
             {
-                return Byte.Parse(this.GetPropertyValue("opencursors"));
+                var propStr = this.GetPropertyValue("opencursors");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -236,7 +264,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("sqlbuffer"));
+                var propStr = this.GetPropertyValue("sqlbuffer");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -262,7 +294,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("ignoredatasourceindex"));
+                var propStr = this.GetPropertyValue("ignoredatasourceindex");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -275,7 +311,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("newconnectionretrycount"));
+                var propStr = this.GetPropertyValue("newconnectionretrycount");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -288,7 +328,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("newconnectionretrydelayms"));
+                var propStr = this.GetPropertyValue("newconnectionretrydelayms");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -314,7 +358,11 @@ namespace CodeCrib.AX.Config
         {
             get
             {
-                return UInt16.Parse(this.GetPropertyValue("connectionidletimeout"));
+                var propStr = this.GetPropertyValue("connectionidletimeout");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                return UInt16.Parse(propStr);
             }
             set
             {
@@ -328,7 +376,11 @@ namespace CodeCrib.AX.Config
             get
             {
                 UInt16 oneKB = 1024;
-                UInt16 size = UInt16.Parse(this.GetPropertyValue("compressionminsize"));
+                var propStr = this.GetPropertyValue("compressionminsize");
+                if (String.IsNullOrEmpty(propStr))
+                    return 0;
+
+                UInt16 size = UInt16.Parse(propStr);
                 return (uint)(size / oneKB);
             }
             set
@@ -343,7 +395,11 @@ namespace CodeCrib.AX.Config
 
             if (this.Properties.Exists(x => x.Name == "processaffinitymask"))
             {
-                affinity = UInt16.Parse(this.GetPropertyValue("processaffinitymask"));
+                var propStr = this.GetPropertyValue("processaffinitymask");
+                if (String.IsNullOrEmpty(propStr))
+                    affinity = 0;
+                else
+                    affinity = UInt16.Parse(propStr);
             }
 
             cpu = (UInt16)Math.Pow(2, cpu);
@@ -357,7 +413,11 @@ namespace CodeCrib.AX.Config
 
             if (this.Properties.Exists(x => x.Name == "processaffinitymask"))
             {
-                affinity = UInt16.Parse(this.GetPropertyValue("processaffinitymask"));
+                var propStr = this.GetPropertyValue("processaffinitymask");
+                if (String.IsNullOrEmpty(propStr))
+                    affinity = 0;
+                else
+                    affinity = UInt16.Parse(propStr);
             }
 
             cpu = (UInt16)Math.Pow(2, cpu);
