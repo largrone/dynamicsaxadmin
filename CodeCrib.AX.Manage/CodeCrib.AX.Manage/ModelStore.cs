@@ -22,11 +22,19 @@ namespace CodeCrib.AX.Manage
         public string Description { get; set; }
     }
 
+    public enum IdConflict { Reject, Overwrite }
+
     public class ModelStore
     {
         string dbServer;
         string dbName;
         string axutilBinaryFolder;
+
+        private string axUtilError;
+        private string axUtilInfo;
+
+        public string AxUtilInfo { get => axUtilInfo; }
+        public string AxUtilError { get => axUtilError; }
 
         public static void ExtractModelInfo(string modelManifest, out string publisher, out string modelName, out string layer)
         {
@@ -120,27 +128,7 @@ namespace CodeCrib.AX.Manage
                 parameters = String.Format("{0} \"/key:{1}\"", parameters, strongNameKeyFile);
             }
 
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(String.Concat(axutilBinaryFolder, @"\axutil.exe"), parameters);
-            processStartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-            processStartInfo.WorkingDirectory = axutilBinaryFolder;
-            processStartInfo.RedirectStandardError = true;
-            processStartInfo.RedirectStandardOutput = true;
-            processStartInfo.UseShellExecute = false;
-
-            Process process = Process.Start(processStartInfo);
-            string error = process.StandardError.ReadToEnd();
-            string info = process.StandardOutput.ReadToEnd();
-
-            try
-            {
-                process.WaitForExit();
-                if (process.ExitCode != 0)
-                    throw new Exception();
-            }
-            catch
-            {
-                throw new Exception(string.Format("Error exporting model: {0}", string.IsNullOrEmpty(error) ? info : error));
-            }
+            RunAXUtil(parameters, "Error exporting model");
         }
 
         public void ExportModelStore(string modelStoreFile)
@@ -173,6 +161,57 @@ namespace CodeCrib.AX.Manage
         {
             string parameters = String.Format("exportstore /s:{0} /db:{1} \"/file:{2}\"", dbServer, dbName, modelStoreFile);
 
+            RunAXUtil(parameters, "Error exporting model store");
+        }
+
+        public void ImportModelStore(string modelStoreFile, string schemaName, IdConflict idConflict = IdConflict.Reject)
+        {
+            ImportModelStoreShell(modelStoreFile, schemaName, idConflict);
+        }
+
+        protected void ImportModelStoreShell(string modelStoreFile, string schemaName, IdConflict idConflict = IdConflict.Reject)
+        {
+            string parameters = String.Format("importstore /s:{0} /db:{1} \"/file:{2}\" /schemaname:{3} /noprompt /idconflict:{4}", dbServer, dbName, modelStoreFile, schemaName, idConflict.ToString());
+
+            RunAXUtil(parameters, String.Format("Error importing model store to schema '{0}'", schemaName));
+
+        }
+        public void ModelStoreApplySchema(string schemaName)
+        {
+            ModelStoreApplySchemaShell(schemaName);
+        }
+
+        protected void ModelStoreApplySchemaShell(string schemaName)
+        {
+            string parameters = String.Format("importstore /s:{0} /db:{1} /apply:{2} /verbose /noprompt", dbServer, dbName, schemaName);
+
+            RunAXUtil(parameters, String.Format("Error applying new model store schema '{0}'", schemaName));
+
+        }
+
+        public void InitializeAXModelStoreSchema(string schemaName, string AOSAccount)
+        {
+            InitializeAXModelStoreSchemaShell(schemaName, AOSAccount);
+        }
+
+        protected void InitializeAXModelStoreSchemaShell(string schemaName, string AOSAccount)
+        {
+            string parameters = String.Format("schema /s:{0} /db:{1} /schemaname:{2}", dbServer, dbName, schemaName);
+
+            if (AOSAccount != "")
+                parameters = String.Format("{0} /AOSAccount:{1}", parameters, AOSAccount);
+
+            RunAXUtil(parameters, String.Format("Cannot initialize model store schema '{0}'", schemaName));
+
+        }
+
+        private void RunAXUtil(string parameters, string errorPrefix)
+        {
+            AXUtilCommand.ExecuteCommand(axutilBinaryFolder, parameters, 60);
+        }
+        /*
+        private void RunAXUtil(string parameters, string errorPrefix)
+        {
             ProcessStartInfo processStartInfo = new ProcessStartInfo(String.Concat(axutilBinaryFolder, @"\axutil.exe"), parameters);
             processStartInfo.WindowStyle = ProcessWindowStyle.Minimized;
             processStartInfo.WorkingDirectory = axutilBinaryFolder;
@@ -189,14 +228,18 @@ namespace CodeCrib.AX.Manage
                 process.WaitForExit();
                 if (process.ExitCode != 0)
                     throw new Exception();
+
+                axUtilInfo = info;
+                axUtilError = error;
             }
             catch
             {
-                throw new Exception(string.Format("Error exporting model store: {0}", string.IsNullOrEmpty(error) ? info : error));
+                throw new Exception(string.Format("{0}:\r\nAXUtil parameters: '{1}'\r\nMessage: {2}", errorPrefix, parameters, string.IsNullOrEmpty(error) ? info : error));
             }
         }
+        */
 
-        public List<string> GetModelElements(string manifestFile)
+            public List<string> GetModelElements(string manifestFile)
         {
             ModelManifest manifest = ModelManifest.Read(manifestFile);
             return GetModelElements(manifest.Name, manifest.Publisher);

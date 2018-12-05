@@ -20,6 +20,12 @@ namespace CodeCrib.AX.Manage
             service = new ServiceController(string.Format("AOS60${0}", serviceNumber.ToString("D2")));
         }
 
+        public AOS(uint serviceNumber, string serverName)
+        {
+            this.serviceNumber = serviceNumber;
+            service = new ServiceController(string.Format("AOS60${0}", serviceNumber.ToString("D2")), serverName);
+        }
+
         public Boolean IsRunning
         {
             get
