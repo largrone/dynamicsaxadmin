@@ -98,7 +98,7 @@ namespace CodeCrib.AX.BuildTasks
                     AutoRunFile = Path.Combine(BuildPaths.Temp, string.Format(@"AutoRun_LabelFlush_{0}.xml", Guid.NewGuid()));
                     AxaptaAutoRun.SerializeAutoRun(AutoRun, AutoRunFile);
 
-                    BuildLogger.LogInformation(string.Format($"Flushing imported label file {labelFile} language {labelLanguage}"));
+                    BuildLogger.LogInformation(string.Format(string.Format("Flushing imported label file {0} language {1}", labelFile, labelLanguage)));
                     BuildLogger.StoreLogFile(AutoRunFile);
 
                     Client.Commands.AutoRun flushCommand = new Client.Commands.AutoRun() { ConfigurationFile = ConfigurationFile, Layer = Layer, LayerCode = LayerCode, Model = ModelName, ModelPublisher = Publisher, Filename = AutoRunFile };
