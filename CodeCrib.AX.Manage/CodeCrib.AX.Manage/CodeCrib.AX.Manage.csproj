@@ -34,8 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AXUtilLib">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Microsoft Dynamics AX\60\ManagementUtilities\AXUtilLib.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\libs\AXUtilLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
