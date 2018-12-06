@@ -28,3 +28,16 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: CopyFiles@2
+  displayName: 'Copy CodeCrib.AX.VSTS Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    Contents: |
+     CodeCrib.AX.VSTS\CodeCrib.AX.VSTS\bin\**\*.*
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'    
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Upload artifacts from $(Build.ArtifactStagingDirectory)'
+  inputs:
+    pathtoPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: CodeCribVSTS
