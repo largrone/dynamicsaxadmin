@@ -10,6 +10,8 @@ variables:
   solution: '**/CodeCrib.AX.VSTS.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  Major: '1'
+  Minor: '0'
 
 steps:
 - task: NuGetToolInstaller@0
@@ -29,15 +31,20 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: CopyFiles@2
-  displayName: 'Copy CodeCrib.AX.VSTS Files to: $(Build.ArtifactStagingDirectory)'
+- task: NuGetCommand@2
+  displayName: 'Pack nuget package'
   inputs:
-    Contents: |
-     CodeCrib.AX.VSTS\CodeCrib.AX.VSTS\bin\**\*.*
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'    
+    command: pack
+    configuration: $(BuildConfiguration)
+    packagesToPack: 'CodeCrib.AX.VSTS\CodeCrib.AX.VSTS\*.csproj'
+    versioningScheme: byPrereleaseNumber
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(BuildID)'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Upload artifacts from $(Build.ArtifactStagingDirectory)'
+- task: NuGetCommand@2
+  displayName: 'Push nuget package to feed'
   inputs:
-    pathtoPublish: $(Build.ArtifactStagingDirectory)
-    artifactName: CodeCribVSTS
+    command: push
+    publishVstsFeed: 'XXLFeed'
+    allowPackageConflicts: true
