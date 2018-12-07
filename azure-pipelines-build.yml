@@ -40,7 +40,7 @@ steps:
     versioningScheme: byPrereleaseNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
-    patchVersion: '$(BuildID)'
+    patchVersion: '$(Build.BuildID)'
 
 - task: NuGetCommand@2
   displayName: 'Push nuget package to feed'
